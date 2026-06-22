@@ -34,9 +34,67 @@
 
 
 <h2 id="questions"> Questions </h2>
+<p> <strong> 1. What is the FTP password? </strong> </p>
+<p> First, we opened the pcap file in Wireshark and navigated to <strong>Tools -> Credentials </strong>. </p>
+<img width="783" height="272" alt="Screenshot 2026-06-22 182441" src="https://github.com/user-attachments/assets/ab996ec8-9c2b-4c9f-8dbf-84054d75f465" />
+<p> 3 packets revealed the same user "kali" via the FTP protocol. Therefore we can click 1 of them and follow the TCP stream of the packet. </p>
+<img width="376" height="365" alt="Screenshot 2026-06-22 183005" src="https://github.com/user-attachments/assets/06431846-f7be-4550-96c1-3a9a45925b2f" />
+<p> The FTP password of the user kali was <strong>AfricaCTF2021</strong>. </p> 
+<br>
+<p> <strong> 2. What is the IPv6 address of the DNS server used by 192.168.1.26? </strong></p>
+<p> We can find the dns packets queried by 192.168.1.26 using display filter. </p>
+<pre> <code lang="text"> dns && ip.src==192.168.1.26 </code> </pre>
+<img width="1482" height="278" alt="Screenshot 2026-06-22 184637" src="https://github.com/user-attachments/assets/53928b92-0d67-41fc-98ff-394288e09f32" />
+<p> 192.168.1.26 made DNS queries to the same destination. Therefore, we can check one of those packets. </p>
+<img width="947" height="217" alt="Screenshot 2026-06-22 184940" src="https://github.com/user-attachments/assets/677110b1-4a03-469b-9a3d-b886d7522e55" />
+<p> According to the detailed information of the packet, we knew that the Ipv4 and the Mac address of the DNS server was 192.168.1.10 and ca:0b:ad:ad:20:ba respectively. Therefore, we can find the Ipv6 of the DNS server using its MAC address in the display filter. </p>
+<pre> <code lang="text"> ipv6 && eth.dst==ca:0b:ad:ad:20:ba </code> </pre>
+<img width="942" height="188" alt="Screenshot 2026-06-22 185851" src="https://github.com/user-attachments/assets/f064bca9-c3fe-4e16-8b72-df0d75674c23" />
+<p> We clicked one of those packet and looked at the ipv6 of the DNS server, which was <strong>fe80::c80b:adff:feaa:1db7</strong>. </p>
+<br>
+<p> <strong> 3. What domain is the user looking up in packet 15174? </strong> </p>
+<img width="403" height="52" alt="Screenshot 2026-06-22 190358" src="https://github.com/user-attachments/assets/5639149a-1125-4d6b-93fb-260e3cf40fb9" />
+<p> First, we navigated to <strong>Go -> Go to Packet...</strong> and enter 15174 then pressed Go to Packet. </p>
+<img width="358" height="46" alt="Screenshot 2026-06-22 190430" src="https://github.com/user-attachments/assets/3853f8f9-b5df-472f-a3f6-443d984e37a6" />
+<p> We can find the DNS query for the domain <strong>www.7-zip.org</strong>. </p>
+<br>
+<p> <strong> 4. How many UDP packets were sent from 192.168.1.26 to 24.39.217.246? </strong> </p>
+<p> We can find the total number of the udp packets using the display filter. </p>
+<pre> <code lang="text"> udp && ip.src==192.168.1.26 && ip.dst==24.39.217.246 </code> </pre>
+<img width="263" height="38" alt="Screenshot 2026-06-22 190920" src="https://github.com/user-attachments/assets/208e7ce4-6892-458d-869e-e671637ca80d" />
+<p> The displayed packets was shown at the bottom right of the window and was <strong>10</strong>. </p>
+<br>
+<p> <strong> 5. What is the MAC address of the system under investigation in the PCAP file? </strong> </p>
+<p> The MAC address of the investigated system can be found in one of the screenshot in Q2. </p>
+<img width="947" height="217" alt="Screenshot 2026-06-22 184940" src="https://github.com/user-attachments/assets/677110b1-4a03-469b-9a3d-b886d7522e55" />
+<p> The MAC address was <strong>c8:09:a8:57:47:93</strong>. </p>
+<br>
+<p> <strong> 6. What was the camera model name used to take picture 20210429_152157.jpg? </strong> </p>
+<p> First, we can find the packet related to "20210429_152157.jpg" using dispay filter. </p>
+<pre> <code lang="text"> frame contains "20210429_152157.jpg" </code> </pre>
+<img width="1206" height="197" alt="Screenshot 2026-06-22 192033" src="https://github.com/user-attachments/assets/5eac25fb-34ac-48e1-bf00-f85d646c07ec" />
+<p> According to the result, the picture was uploaded from the investigated system 192.168.1.26 to the FTP server 192.168.1.20. We can navigate to <strong>File -> Export Objects -> FTP-DATA...</strong> to retrieve the picture. </p>
+<img width="937" height="682" alt="Screenshot 2026-06-22 192728" src="https://github.com/user-attachments/assets/dbdaa396-bd93-486a-9f8a-0abbb43a9b69" />
+<p> we saved the image and <strong>right click the image -> Properties -> Details</strong> and can find the Camera model. </p>
+<img width="533" height="622" alt="Screenshot 2026-06-22 193055" src="https://github.com/user-attachments/assets/92125739-e15f-4569-88d4-e2c2d0fe613b" />
+<p> The Camera model of this picture was <strong>LM-Q725K</strong>. </p>
+<br>
+<p> <strong> 7. What is the ephemeral public key provided by the server during the TLS handshake in the session with the session ID: da4a0000342e4b73459d7360b4bea971cc303ac18d29b99067e46d16cc07f4ff? </strong> </p>
+<p> We can find the targeted TLS handshake packet using display filter. </p>
+<pre> <code lang="text"> tls.handshake.session_id==da4a0000342e4b73459d7360b4bea971cc303ac18d29b99067e46d16cc07f4ff </code> </pre>
+<img width="1648" height="177" alt="Screenshot 2026-06-22 193610" src="https://github.com/user-attachments/assets/d5e0e3eb-1cb7-48ca-afcf-cc5f7e485fcd" />
+<p> We clicked the packet to find the ephemeral public key. </p>
+<img width="1867" height="463" alt="Screenshot 2026-06-22 193742" src="https://github.com/user-attachments/assets/747181ef-5e74-4655-bfac-462c8ed80e58" />
+<p> The public key was <strong>04edcc123af7b13e90ce101a31c2f996f471a7c8f48a1b81d765085f548059a550f3f4f62ca1f0e8f74d727053074a37bceb2cbdc7ce2a8994dcd76dd6834eefc5438c3b6da929321f3a1366bd14c877cc83e5d0731b7f80a6b80916efd4a23a4d</strong>. This key generated by the server was used for encryption for this specific session. </p>
+<br>
+<p> <strong> 8. What is the first TLS 1.3 client random that was used to establish a connection with protonmail.com? </strong> </p>
+<p> We can find the targeted packet related to "protonmail.com" using display filter. </p>
+<pre> <code lang="text"> tls && frame contains "protonmail.com" </code> </pre>
+<img width="1235" height="358" alt="Screenshot 2026-06-22 194428" src="https://github.com/user-attachments/assets/8515e591-54b5-40f3-b27f-02c0bade4f7d" />
+
 <p align="right">(<a href="#top">Back to Top</a>)</p>
 
 
 <h2 id="reference"> Reference </h2>
-<p> <a href="ttps://cyberdefenders.org/blueteam-ctf-challenges/achievements/abc1230940/packetmaze/"> CyberDefenders - PacketMaze Lab </a> </p>
+<p> <a href="https://cyberdefenders.org/blueteam-ctf-challenges/achievements/abc1230940/packetmaze/"> CyberDefenders - PacketMaze Lab </a> </p>
 <p align="right">(<a href="#top">Back to Top</a>)</p>
