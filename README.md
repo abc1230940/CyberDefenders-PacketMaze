@@ -90,8 +90,36 @@
 <p> <strong> 8. What is the first TLS 1.3 client random that was used to establish a connection with protonmail.com? </strong> </p>
 <p> We can find the targeted packet related to "protonmail.com" using display filter. </p>
 <pre> <code lang="text"> tls && frame contains "protonmail.com" </code> </pre>
-<img width="1235" height="358" alt="Screenshot 2026-06-22 194428" src="https://github.com/user-attachments/assets/8515e591-54b5-40f3-b27f-02c0bade4f7d" />
-
+<img width="1235" height="358" alt="Screenshot 2026-06-22 194428" src="https://github.com/user-attaprotonmail.comchments/assets/8515e591-54b5-40f3-b27f-02c0bade4f7d" />
+<p> We clicked the first packet to find the client random. </p>
+<img width="820" height="298" alt="Screenshot 2026-06-22 194652" src="https://github.com/user-attachments/assets/cd463dbd-d963-4272-850c-56f1eaeef867" />
+<p> The client random was <strong>24e92513b97a0348f733d16996929a79be21b0b1400cd7e2862a732ce7775b70</strong>. The client random and server random were used for generation of a secret key to encrypt and decrypt the network traffic between the host and the domain protonmail.com. </p>
+<br>
+<p> <strong> 9. Which country is the manufacturer of the FTP server’s MAC address registered in? </strong> </p>
+<p> Since we knew the IP address of the FTP server from the previous question, we can find the related packets using display filter. </p>
+<pre> <code lang="text"> ftp && ip.addr==192.168.1.20 </code> </pre>
+<img width="1425" height="682" alt="Screenshot 2026-06-22 195621" src="https://github.com/user-attachments/assets/74b276e2-a940-45f7-bf45-e4baa08f382e" />
+<p> We can click the first packet to find the MAC address of the FTP server. </p>
+<img width="945" height="130" alt="Screenshot 2026-06-22 195750" src="https://github.com/user-attachments/assets/f279c98b-a540-4f99-82cd-3e22f984a316" />
+<p> The MAC address of the FTP server was 08:00:27:a6:1f:86. In order to find the manufacturer of the server, we can query <a href="https://macvendorlookup.com/"> MAC Address Lookup </a>. </p>
+<img width="1236" height="790" alt="Screenshot 2026-06-22 200225" src="https://github.com/user-attachments/assets/7c533726-9b65-48f6-bbd8-c5121dc19672" />
+<p> By searching the MAC address, the manufacturer of the FTP server was in <strong>United States</strong>. </p>
+<br>
+<p> <strong> 10. What time was a non-standard folder created on the FTP server on the 20th of April? </strong> </p>
+<p> To view the actual contents, file transfers, or detailed directory listings from the FTP server, we can use display filter quering FTP-DATA (Port 20). </p>
+<pre> <code lang="text"> ftp-data </code> </pre>
+<img width="1380" height="678" alt="Screenshot 2026-06-22 201220" src="https://github.com/user-attachments/assets/21f871a5-f3ca-46f9-a23c-2058e769aeda" />
+<p> We can click the first LIST packet showing the metadata of the files and directories. </p>
+<img width="712" height="207" alt="Screenshot 2026-06-22 201159" src="https://github.com/user-attachments/assets/d4a555e3-12bc-4c53-91c7-dabf89147825" />
+<p> The "non-standard" folder created should be ftp. The creation time was Apr 20 <strong>17:53</strong>. </p>
+<br>
+<p> <strong> 11. What URL was visited by the user and connected to the IP address 104.21.89.171? </strong> </p>
+<p> To find the related HTTP packet, we can use the display filter. </p>
+<pre> <code lang="text"> http && ip.dst==104.21.89.171 </code> </pre>
+<img width="1013" height="180" alt="Screenshot 2026-06-22 201950" src="https://github.com/user-attachments/assets/bbcf5e1c-3f35-435c-bff7-ad5efa10073e" />
+<p> We can follow the HTTP stream to find the URL visited to the targeted destination. </p>
+<img width="1305" height="185" alt="Screenshot 2026-06-22 202042" src="https://github.com/user-attachments/assets/2bedee98-1e74-43b9-b0cb-bca380bee369" />
+<p> The visited URL was <strong>hxxp[://]dfir[.]science/</strong>. </p>
 <p align="right">(<a href="#top">Back to Top</a>)</p>
 
 
